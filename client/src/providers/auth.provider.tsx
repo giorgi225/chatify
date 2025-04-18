@@ -20,7 +20,7 @@ import { ChatType, UserType } from "@/types/types";
 interface AuthContextProps {
   user: UserType | null;
   setUser: (user: UserType | null) => void;
-  refreshToken: () => Promise<void>;
+  refreshToken: () => Promise<boolean>;
   logout: () => Promise<void>;
 }
 
@@ -39,18 +39,21 @@ export const AuthProvider = ({
   const [isRefreshing, setIsRefreshing] = useState<boolean>(!!session?.refresh);
   const [socketReady, setSocketReady] = useState(false);
 
-  const refreshToken = async () => {
+  const refreshToken = async (): Promise<boolean> => {
     try {
       const res = await fetcher<UserType>("/auth/refresh-token", {
         method: "POST",
       });
+  
       if (!res.ok) {
         router.push("/auth/login");
-        return;
+        return false;
       }
-      await onInitSocket();
+  
+      return true;
     } catch (error) {
-      console.error(`Error whilre refreshing token: ` + error);
+      console.error("Error refreshing token:", error);
+      return false;
     } finally {
       setIsRefreshing(false);
     }
@@ -68,6 +71,8 @@ export const AuthProvider = ({
   };
 
   const onInitSocket = async () => {
+    console.log("Initing");
+    
     const res = await fetcher<{ token: string }>("/auth/token", {
       method: "POST",
     });
@@ -76,32 +81,34 @@ export const AuthProvider = ({
       throw "Unauthorized";
     }
 
+    disconnectSocket();
     initSocket(res.data.token);
     setSocketReady(true);
   };
 
+
   useEffect(() => {
     const setup = async () => {
       if (!session) return;
-
+  
       if (session.refresh) {
-        await refreshToken();
+        const refreshed = await refreshToken();
+        if (!refreshed) return;
       }
-
-      await onInitSocket();
+        
+      await onInitSocket(); // always run after refresh
     };
-
+  
     setup();
-  }, [refreshToken, session]);
+  }, [session]);
 
   useEffect(() => {
     if (!session || !socketReady) return;
 
     const socket = getSocket();
-
+    
     if (!socket) {
       console.log("No Socket");
-
       return;
     }
 
