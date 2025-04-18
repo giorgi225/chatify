@@ -39,7 +39,9 @@ class ChatController {
     public async getUserChats(req: Request, res: Response) {
         const id = (req as AuthorizedRequest).userId;
 
+        const start = Date.now();
         try {
+
             const chats = await prisma.chat.findMany({
                 where: {
                     chat_participant: {
@@ -64,7 +66,7 @@ class ChatController {
                     }
                 },
             })
-
+            console.log('DB Query Time:', Date.now() - start, 'ms');
             // sort by latest message 
             const sortedChats = chats.sort((a, b) => {
                 const aDate = a.message[0]?.createdAt ? new Date(a.message[0].createdAt).getTime() : 0;
