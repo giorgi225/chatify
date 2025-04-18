@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id                 String              @id @default(uuid())
+  firstname          String
+  lastname           String
+  email              String              @unique
+  password           String
+  profilePic         String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  chat_parcitipant   chat_participant[]
+  email_verification email_verification?
+  invitation         invitation[]
+  message            message[]
+  reset_password     reset_password?
+}
+
+model reset_password {
+  id           String    @id @default(uuid())
+  userId       String    @unique
+  code         String?
+  sendAttempts Int       @default(0)
+  lastSentAt   DateTime?
+  resetedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  expiresIn    DateTime?
+  user         user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model email_verification {
+  id String @id @default(uuid())
+  userId       String    @unique
+  code         String?
+  verified     Boolean   @default(false)
+  verifiedAt   DateTime?
+  expiresIn    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastSentAt   DateTime?
+  sendAttempts Int       @default(0)
+  user         user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model chat {
+  id               String             @id @default(uuid())
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  chat_participant chat_participant[]
+  message          message[]
+}
+
+model chat_participant {
+  id     String @id @default(uuid())
+  userId String
+  chatId String
+  chat   chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chatId])
+  @@index([chatId], map: "chat_participant_chatId_fkey")
+  @@index([userId], map: "chat_participant_userId_fkey")
+}
+
+model message {
+  id        String   @id @default(uuid())
+  message   String?  @db.LongText
+  senderId  String
+  chatId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  chat      chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender    user     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([chatId], map: "message_chatId_fkey")
+  @@index([senderId], map: "message_senderId_fkey")
+}
+
+model invitation {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  token     String   @unique
+  inviterId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  inviter   user     @relation(fields: [inviterId], references: [id])
+
+  @@index([inviterId], map: "invitation_inviterId_fkey")
+}
