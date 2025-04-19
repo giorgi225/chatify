@@ -539,6 +539,7 @@ class AuthController {
 
             if (ok && status === "success" && user && tokens) {
                 const { accessToken, refreshToken } = tokens;
+                
                 setJwtCookies(res, accessToken, refreshToken);
                 res.send(`
                     <script>
