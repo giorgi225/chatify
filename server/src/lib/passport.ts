@@ -16,7 +16,7 @@ const googleStrategy = new GoogleStrategy(
     {
         clientID: OAuthConfig.GOOGLE_CLIENT_ID,
         clientSecret: OAuthConfig.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/api/auth/google/callback",
+        callbackURL: OAuthConfig.GOOGLE_CALLBACK_URL,
         passReqToCallback: true,
     },
     async (req: Request, accessToken, refreshToken, profile, done) => {
