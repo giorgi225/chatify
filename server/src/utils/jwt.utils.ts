@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import authConfig from "../config/auth.config";
 import { Response } from "express";
 import { StringValue } from "../types/types";
+import appConfig from "../config/app.config";
 
 export const getTokens = (payload: object): { accessToken: string, refreshToken: string } => {
     const { ACCESS_SECRET, ACCESS_SECRET_EXPIRES_IN, REFRESH_SECRET, REFRESH_SECRET_EXPIRES_IN } = authConfig;
@@ -23,6 +24,7 @@ export const setJwtCookies = (res: Response, accessToken: string, refreshToken?:
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         sameSite: "strict",
+        domain: appConfig.FRONTEND_URL,
         secure: process.env.NODE_ENV === "production"
     })
 
@@ -30,6 +32,7 @@ export const setJwtCookies = (res: Response, accessToken: string, refreshToken?:
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             sameSite: "strict",
+            domain: appConfig.FRONTEND_URL,
             secure: process.env.NODE_ENV === "production"
         })
     }
