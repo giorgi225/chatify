@@ -97,7 +97,7 @@ const LoginForm = () => {
 
   const onGoogleAuth = () => {
     const popup = window.open(
-      `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/google`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/google`,
       "Google login",
       "width=500,height=600"
     );
