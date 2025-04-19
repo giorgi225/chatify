@@ -7,12 +7,25 @@ export type AuthorizedSocketRequest = Socket & {
     user?: UserType
 }
 
+export type OauthRequest = Request & {
+    tokens?: {
+        accessToken: string;
+        refreshToken: string;
+    },
+    authResponse: {
+        ok: boolean;
+        status: "verify-email" | "success";
+        user?: UserType;
+    }
+}
+
 
 export type UserType = {
     id: UUID,
     firstname: string,
     lastname: string,
     email: string,
+    profilePic: string | null
 }
 
 type Unit =

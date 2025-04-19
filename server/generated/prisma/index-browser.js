@@ -188,54 +188,14 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.userOrderByRelevanceFieldEnum = {
-  id: 'id',
-  firstname: 'firstname',
-  lastname: 'lastname',
-  email: 'email',
-  password: 'password',
-  profilePic: 'profilePic'
-};
-
-exports.Prisma.reset_passwordOrderByRelevanceFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  code: 'code'
-};
-
-exports.Prisma.email_verificationOrderByRelevanceFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  code: 'code'
-};
-
-exports.Prisma.chatOrderByRelevanceFieldEnum = {
-  id: 'id'
-};
-
-exports.Prisma.chat_participantOrderByRelevanceFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  chatId: 'chatId'
-};
-
-exports.Prisma.messageOrderByRelevanceFieldEnum = {
-  id: 'id',
-  message: 'message',
-  senderId: 'senderId',
-  chatId: 'chatId'
-};
-
-exports.Prisma.invitationOrderByRelevanceFieldEnum = {
-  id: 'id',
-  email: 'email',
-  token: 'token',
-  inviterId: 'inviterId'
 };
 
 

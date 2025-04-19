@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -38,7 +38,7 @@ model reset_password {
 }
 
 model email_verification {
-  id String @id @default(uuid())
+  id           String    @id @default(uuid())
   userId       String    @unique
   code         String?
   verified     Boolean   @default(false)
@@ -67,22 +67,17 @@ model chat_participant {
   user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, chatId])
-  @@index([chatId], map: "chat_participant_chatId_fkey")
-  @@index([userId], map: "chat_participant_userId_fkey")
 }
 
 model message {
   id        String   @id @default(uuid())
-  message   String?  @db.LongText
+  message   String?
   senderId  String
   chatId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   chat      chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
   sender    user     @relation(fields: [senderId], references: [id], onDelete: Cascade)
-
-  @@index([chatId], map: "message_chatId_fkey")
-  @@index([senderId], map: "message_senderId_fkey")
 }
 
 model invitation {
@@ -93,6 +88,4 @@ model invitation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   inviter   user     @relation(fields: [inviterId], references: [id])
-
-  @@index([inviterId], map: "invitation_inviterId_fkey")
 }

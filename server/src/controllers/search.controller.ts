@@ -46,6 +46,7 @@ class SearchController {
                     firstname: true,
                     lastname: true,
                     email: true,
+                    profilePic: true,
                 },
                 take: 10,
             });

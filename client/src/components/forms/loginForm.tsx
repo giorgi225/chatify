@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -94,6 +95,32 @@ const LoginForm = () => {
     }
   }
 
+  const onGoogleAuth = () => {
+    const popup = window.open(
+      `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/google`,
+      "Google login",
+      "width=500,height=600"
+    );
+
+    const listener = (event: MessageEvent) => {
+      const { status, email } = event.data;
+      console.log(status);
+
+      if (status === "success") {
+        window.location.href = "/";
+      } else if (status === "verify-email" && email) {
+        window.location.href = `/auth/verify-email?email=${email}`;
+      } else if (status === "error") {
+        toast.error("Cant login using google");
+      }
+
+      window.removeEventListener("message", listener);
+      popup?.close();
+    };
+
+    window.addEventListener("message", listener);
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -162,7 +189,19 @@ const LoginForm = () => {
               >
                 Login
               </Button>
-              <Button type="button" variant="outline" className="w-full">
+              <Button
+                onClick={onGoogleAuth}
+                type="button"
+                variant="outline"
+                className="w-full gap-1"
+              >
+                <Image
+                  src={`/google-logo.webp`}
+                  alt="google"
+                  width={50}
+                  height={50}
+                  className="w-[25px]"
+                />
                 Login with Google
               </Button>
             </div>

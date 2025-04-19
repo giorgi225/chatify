@@ -2,6 +2,7 @@ import { Router } from "express";
 import authController from "../controllers/auth.controller";
 import validate from "../middleware/validate.middleware";
 import authSchema from "../validations/auth.schema";
+import passport from "passport";
 
 const authRoutes = Router();
 
@@ -17,6 +18,20 @@ authRoutes.post("/reset-password", [validate.body(authSchema.forgotPassword)], a
 
 authRoutes.post("/verify-email", [validate.body(authSchema.verifyEmail)], authController.verifyEmail);
 authRoutes.post("/send-email-verification", [validate.body(authSchema.sendEmailVerification)], authController.sendEmailVerification);
-authRoutes.post("/get-email-verification-limit-info", [validate.body(authSchema.sendEmailVerification)], authController.getVerificationLimitInfo)
+authRoutes.post("/get-email-verification-limit-info", [validate.body(authSchema.sendEmailVerification)], authController.getVerificationLimitInfo);
 
+
+// oauth
+authRoutes.get("/google", passport.authenticate("google", {
+    scope: ["profile", "email"],
+    session: false,
+}))
+
+authRoutes.get("/google/callback",
+    passport.authenticate("google", {
+        failureRedirect: "/failed",
+        session: false
+    }),
+    authController.googleCallback
+)
 export default authRoutes;

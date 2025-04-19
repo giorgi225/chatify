@@ -20,8 +20,8 @@ export type UserType = {
     firstname: string,
     lastname: string,
     email: string,
+    profilePic: string | null
 }
-
 export type MessageType = {
     id: UUID,
     message: string,

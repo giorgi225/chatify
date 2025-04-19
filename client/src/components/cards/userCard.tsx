@@ -1,8 +1,7 @@
+import Image from "next/image";
 import React from "react";
 
 import { useChatStore } from "@/store/chat.store";
-
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 import { UserType } from "@/types/types";
 
@@ -11,10 +10,11 @@ const UserCard = ({
   email,
   firstname,
   lastname,
+  profilePic,
   length,
   index,
 }: UserType & { length: number; index: number }) => {
-  const { initOrLoadChat, activeChat } = useChatStore();
+  const { initOrLoadChat, activeChat } = useChatStore();  
   return (
     <button
       type="button"
@@ -33,12 +33,21 @@ const UserCard = ({
       } py-3 px-4 border-b border-b-foreground/10`}
     >
       <div className=" flex items-center gap-3">
-        <Avatar className="shrink-0">
-          {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
-          <AvatarFallback className="uppercase">
+        {profilePic ? (
+          <Image
+            className="size-10 rounded-full"
+            src={profilePic}
+            alt={firstname}
+            width={400}
+            height={400}
+            quality={100}
+            priority={true}
+          />
+        ) : (
+          <div className="size-10 flex items-center justify-center uppercase rounded-full bg-foreground/5">
             {firstname.charAt(0) + "." + lastname.charAt(0)}
-          </AvatarFallback>
-        </Avatar>
+          </div>
+        )}
         <div className="flex flex-col items-start">
           <h6 className="text-sm font-medium truncate">
             {firstname} {lastname}

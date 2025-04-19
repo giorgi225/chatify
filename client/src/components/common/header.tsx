@@ -15,7 +15,6 @@ import { useSession } from "@/providers/auth.provider";
 
 import SearchInput from "@/components/common/searchInput";
 import InviteFriendModal from "@/components/modals/InviteFriendModal";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -57,12 +56,21 @@ const Header = () => {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Avatar className="">
-                {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
-                <AvatarFallback className="uppercase">
+              {user.profilePic ? (
+                <Image
+                  className="size-10 rounded-full"
+                  src={user.profilePic}
+                  alt={user.firstname.charAt(0) + "." + user.lastname.charAt(0)}
+                  width={400}
+                  height={400}
+                  quality={100}
+                  priority={true}
+                />
+              ) : (
+                <div className="size-10 flex items-center justify-center uppercase rounded-full bg-foreground/5">
                   {user.firstname.charAt(0) + "." + user.lastname.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
+                </div>
+              )}
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>

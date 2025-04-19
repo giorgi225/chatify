@@ -4,6 +4,7 @@ import { UUID } from "crypto";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Send } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -13,7 +14,6 @@ import { useChatStore } from "@/store/chat.store";
 
 import { useSession } from "@/providers/auth.provider";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
@@ -71,12 +71,21 @@ const Chat = () => {
     <div className="w-full flex-1 flex flex-col bg-gray-100 overflow-hidden">
       <div className="h-20 bg-white border-b flex items-center justify-between px-4">
         <div className=" flex items-center gap-3">
-          <Avatar className="shrink-0">
-            {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
-            <AvatarFallback className="uppercase">
+          {user.profilePic ? (
+            <Image
+              className="size-10 rounded-full"
+              src={user.profilePic}
+              alt={user.firstname}
+              width={400}
+              height={400}
+              quality={100}
+              priority={true}
+            />
+          ) : (
+            <div className="size-10 flex items-center justify-center uppercase rounded-full bg-foreground/5">
               {senderInitials}
-            </AvatarFallback>
-          </Avatar>
+            </div>
+          )}
           <div className="flex flex-col">
             <h6 className="text-base font-medium truncate">{senderFullname}</h6>
             <span className="text-sm">Last seen 5m ago</span>
@@ -150,7 +159,7 @@ const MessageInput = ({ receiverId }: { receiverId: UUID }) => {
       // success
       form.setValue("message", "");
       const socket = getSocket();
-      if (socket) {        
+      if (socket) {
         socket.emit("send-message", {
           ...values,
           otherUserId: receiverId,

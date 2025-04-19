@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import chatRoutes from "./routes/chat.routes";
 import searchRoutes from "./routes/search.routes";
+import passport from "./lib/passport";
 
 class App {
     private readonly app: Express;
@@ -39,6 +40,9 @@ class App {
             origin: [appConfig.FRONTEND_URL],
             credentials: true
         }))
+
+        // only for oauth without session
+        this.app.use(passport.initialize());
     }
 
     private registerRoutes() {

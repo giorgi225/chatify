@@ -1,5 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -86,7 +87,7 @@ const RegisterForm = ({ invitation }: Props) => {
 
       if (invitation) {
         router.push("/");
-      }else {
+      } else {
         router.push(`/auth/verify-email?email=${values.email}`);
       }
     } catch (error) {
@@ -102,10 +103,43 @@ const RegisterForm = ({ invitation }: Props) => {
     }
   }
 
+  const onGoogleAuth = () => {
+    const popup = window.open(
+      `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/google`,
+      "Google login",
+      "width=500,height=600"
+    );
+
+    const listener = (event: MessageEvent) => {
+      const { status, email } = event.data;
+      console.log(status);
+
+      if (status === "success") {
+        window.location.href = "/";
+      } else if (status === "verify-email" && email) {
+        window.location.href = `/auth/verify-email?email=${email}`;
+      } else if (status === "error") {
+        toast.error("Cant login using google");
+      }
+
+      window.removeEventListener("message", listener);
+      popup?.close();
+    };
+
+    window.addEventListener("message", listener);
+  };
+
   return (
     <Card>
       <CardHeader>
-        {invitation && <div className="text-sm px-4 py-1 rounded-full mx-auto mb-1 bg-yellow-600/10 text-foreground/60 w-max">Invited by <span className="text-yellow-600">{invitation.inviter.firstname} {invitation.inviter.lastname}</span></div>}
+        {invitation && (
+          <div className="text-sm px-4 py-1 rounded-full mx-auto mb-1 bg-yellow-600/10 text-foreground/60 w-max">
+            Invited by{" "}
+            <span className="text-yellow-600">
+              {invitation.inviter.firstname} {invitation.inviter.lastname}
+            </span>
+          </div>
+        )}
         <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription>
           Create account and start chatting with your friends.
@@ -209,9 +243,24 @@ const RegisterForm = ({ invitation }: Props) => {
               >
                 Register
               </Button>
-              <Button type="button" variant="outline" className="w-full">
-                Register with Google
-              </Button>
+
+              {!invitation && (
+                <Button
+                  onClick={onGoogleAuth}
+                  type="button"
+                  variant="outline"
+                  className="w-full gap-1"
+                >
+                  <Image
+                    src={`/google-logo.webp`}
+                    alt="google"
+                    width={50}
+                    height={50}
+                    className="w-[25px]"
+                  />
+                  Register with Google
+                </Button>
+              )}
             </div>
 
             <div className="mt-4 text-center text-sm">

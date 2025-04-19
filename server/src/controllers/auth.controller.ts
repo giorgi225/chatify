@@ -14,6 +14,8 @@ import emailConfig from "../config/email.config";
 import { email_verification, reset_password, } from "../../generated/prisma";
 import { fullChatInclude } from "./chat.controller";
 import { addMilliseconds, differenceInSeconds } from "date-fns";
+import { OauthRequest } from "../types/types";
+import appConfig from "../config/app.config";
 
 class AuthController {
     // login
@@ -508,10 +510,78 @@ class AuthController {
             return send.serverError(res, "An error occurred while checking verification status");
         }
     }
+
     public async getToken(req: Request, res: Response) {
         // validating both cookies in middleware after pass returning accessToken to init socket
         return send.success(res, { token: req.cookies.accessToken });
     }
+
+    // oauth
+    public async googleCallback(req: Request, res: Response) {
+        try {
+            const authResponse = (req as OauthRequest).authResponse;
+            const tokens = (req as OauthRequest).tokens;
+
+            if (!authResponse) {
+                res.send(`
+                    <script>
+                           window.opener.postMessage(
+                           ${JSON.stringify({ status: "error" })},
+                           "${appConfig.FRONTEND_URL}"
+                           );
+                           window.close();
+                       </script>
+               `)
+                return;
+            }
+
+            const { ok, status, user } = authResponse;
+
+            if (ok && status === "success" && user && tokens) {
+                const { accessToken, refreshToken } = tokens;
+                setJwtCookies(res, accessToken, refreshToken);
+                res.send(`
+                    <script>
+                           window.opener.postMessage(
+                           ${JSON.stringify({ status: "success" })},
+                           "${appConfig.FRONTEND_URL}"
+                           );
+                           window.close();
+                       </script>
+               `)
+                return;
+            }
+
+            if (!ok && status === "verify-email" && user) {
+                res.send(`
+                         <script>
+                                window.opener.postMessage(
+                                ${JSON.stringify({ status: "verify-email", email: user.email })},
+                                "${appConfig.FRONTEND_URL}"
+                                );
+                                window.close();
+                            </script>
+                    `)
+                return;
+            }
+
+            return send.serverError(res)
+
+        } catch (error) {
+            console.error("Google callback error:", error);
+            res.send(`
+                <script>
+                       window.opener.postMessage(
+                       ${JSON.stringify({ status: "error" })},
+                       "${appConfig.FRONTEND_URL}"
+                       );
+                       window.close();
+                   </script>
+           `)
+            return;
+        }
+    }
+
 }
 
 const authController = new AuthController();

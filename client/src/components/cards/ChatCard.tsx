@@ -1,16 +1,13 @@
+import Image from "next/image";
 import React from "react";
 
 import { useChatStore } from "@/store/chat.store";
 
 import { useSession } from "@/providers/auth.provider";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
 import { formatTimestamp } from "@/utils/date.utils";
 
 import { ChatParticipantType, ChatType } from "@/types/types";
-
-
 
 const ChatCard = ({ id, chat_participant, message }: ChatType) => {
   const { user } = useSession();
@@ -47,12 +44,21 @@ const ChatCard = ({ id, chat_participant, message }: ChatType) => {
       } select-none cursor-pointer flex items-center gap-3 py-3 px-4 hover:bg-gray-100 transition-all`}
     >
       <div className="relative rounded-full">
-        <Avatar className=" shrink-0">
-          {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
-          <AvatarFallback className="uppercase">
+        {user.profilePic ? (
+          <Image
+            className="size-10 rounded-full"
+            src={user.profilePic}
+            alt={user.firstname.charAt(0) + "." + user.lastname.charAt(0)}
+            width={400}
+            height={400}
+            quality={100}
+            priority={true}
+          />
+        ) : (
+          <div className="size-10 flex items-center justify-center uppercase rounded-full bg-foreground/5">
             {senderInitials}
-          </AvatarFallback>
-        </Avatar>
+          </div>
+        )}
         {isOnline && (
           <div
             className={`absolute bottom-[2.5px] right-[2.5px] w-2 h-2 rounded-full bg-green-600`}
