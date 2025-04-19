@@ -11,6 +11,7 @@ import { generate6Digit, generateFutureDateFromDuration } from "../utils/generat
 import emailServices from "../services/email.services";
 import emailConfig from "../config/email.config";
 
+console.log("Using callback URL:", OAuthConfig.GOOGLE_CALLBACK_URL);
 // Initialize immediately
 const googleStrategy = new GoogleStrategy(
     {
