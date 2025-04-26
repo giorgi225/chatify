@@ -1,0 +1,82 @@
+.EmojiPickerReact {
+  font-size: 13px;
+  z-index: 999;
+  --epr-highlight-color: #007aeb !important;
+  --epr-hover-bg-color: #e5f0fa !important;
+  --epr-hover-bg-color-reduced-opacity: #e5f0fa80 !important;
+  --epr-focus-bg-color: #e0f0ff !important;
+  --epr-text-color: #858585 !important;
+  --epr-search-input-bg-color: #f6f6f6 !important;
+  --epr-picker-border-color: #e7e7e7 !important;
+  --epr-bg-color: #fff !important;
+  --epr-reactions-bg-color: #ffffff90 !important;
+  --epr-category-icon-active-color: #6aa8de !important;
+  --epr-skin-tone-picker-menu-color: #ffffff95 !important;
+  --epr-skin-tone-outer-border-color: #555555 !important;
+  --epr-skin-tone-inner-border-color: var(--epr-bg-color) !important;
+  --epr-horizontal-padding: 7px !important;
+  --epr-picker-border-radius: 8px !important;
+  --epr-search-border-color: #474747 !important;
+  --epr-header-padding: 8px var(--epr-horizontal-padding) !important;
+  --epr-active-skin-tone-indicator-border-color: var(
+    --epr-highlight-color
+  ) !important;
+  --epr-active-skin-hover-color: var(--epr-hover-bg-color) !important;
+  --epr-search-input-bg-color-active: var(
+    --epr-search-input-bg-color
+  ) !important;
+  --epr-search-input-padding: 0 27px !important;
+  --epr-search-input-border-radius: 8px !important;
+  --epr-search-input-height: 34px !important;
+  xt-color: var(--epr-text-color) !important;
+  --epr-search-input-placeholder-color: var(--epr-text-color) !important;
+  --epr-search-bar-inner-padding: var(--epr-horizontal-padding) !important;
+  --epr-category-navigation-button-size: 25px !important;
+  --epr-emoji-variation-picker-height: 25px !important;
+  --epr-emoji-variation-picker-bg-color: var(--epr-bg-color) !important;
+  --epr-preview-height: 33px !important;
+  --epr-preview-text-size: 12px !important;
+  --epr-preview-text-padding: 0 var(--epr-horizontal-padding) !important;
+  --epr-preview-border-color: var(--epr-picker-border-color) !important;
+  --epr-preview-text-color: var(--epr-text-color) !important;
+  --epr-category-padding: 0 var(--epr-horizontal-padding) !important;
+  --epr-category-label-bg-color: #ffffffe6 !important;
+  --epr-category-label-text-color: var(--epr-text-color) !important;
+  --epr-category-label-padding: 0 var(--epr-horizontal-padding) !important;
+  --epr-category-label-height: 25px !important;
+  --epr-emoji-size: 20px !important;
+  --epr-emoji-padding: 3px !important;
+  --epr-emoji-fullsize: calc(
+    var(--epr-emoji-size) + var(--epr-emoji-padding) * 2
+  ) !important;
+  --epr-emoji-hover-color: #efefef !important;
+  --epr-emoji-variation-indicator-color: var(
+    --epr-picker-border-color
+  ) !important;
+  --epr-emoji-variation-indicator-color-hover: var(--epr-text-color) !important;
+  --epr-header-overlay-z-index: 3 !important;
+  --epr-emoji-variations-indictator-z-index: 1 !important;
+  --epr-category-label-z-index: 2 !important;
+  --epr-skin-variation-picker-z-index: 5 !important;
+  --epr-preview-z-index: 6 !important;
+  --epr-dark: #000 !important;
+  --epr-dark-emoji-variation-picker-bg-color: var(--epr-dark) !important;
+  --epr-dark-highlight-color: #c0c0c0 !important;
+  --epr-dark-text-color: var(--epr-highlight-color) !important;
+  --epr-dark-hover-bg-color: #363636f6 !important;
+  --epr-dark-hover-bg-color-reduced-opacity: #36363680 !important;
+  --epr-dark-focus-bg-color: #474747 !important;
+  --epr-dark-search-input-bg-color: #333333 !important;
+  --epr-dark-category-label-bg-color: #222222e6 !important;
+  --epr-dark-picker-border-color: #151617 !important;
+  --epr-dark-bg-color: #222222 !important;
+  --epr-dark-reactions-bg-color: #22222290 !important;
+  --epr-dark-search-input-bg-color-active: var(--epr-dark) !important;
+  --epr-dark-emoji-variation-indicator-color: #444 !important;
+  --epr-dark-category-icon-active-color: #3271b7 !important;
+  --epr-dark-skin-tone-picker-menu-color: #22222295 !important;
+  --epr-dark-skin-tone-outer-border-color: var(
+    --epr-dark-picker-border-color
+  ) !important;
+  --epr-dark-skin-tone-inner-border-color: #ffffff !important;
+}
