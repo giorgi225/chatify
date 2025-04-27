@@ -66,7 +66,7 @@ npm run dev
 ### 6. Install backend dependencies
 
 ```bash
-cd ../server
+cd server
 npm install
 ```
 
